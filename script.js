@@ -75,7 +75,7 @@ function agregarProductos(){
         }else if(otroProducto == 1){
             continuarProductos = true;
         }
-        alert(productosFaltantes);
+        // alert(productosFaltantes);
     }
     console.log(productosFaltantes)
     return productosFaltantes;
