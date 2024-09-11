@@ -1,5 +1,18 @@
 let distribuidores = [];
+
+class ProductoFaltante{
+    static id = 0;
+
+    constructor(articulo, cantidad){
+        this.id = ++ProductoFaltante.id;
+        
+        this.articulo = articulo;
+        this.cantidad = cantidad;
+    }
+}
+
 let continuar = true;
+// let productosFaltantes = [];
 
 let lista = prompt("Buenos días, vamos a Reponer! ¿Cómo deseas listar hoy? Presiona 1 para listar por distribuidor.");
 
@@ -23,6 +36,9 @@ function distribuidor(){
     
     do {
         newDis = prompt("Por favor, ingrese el distribuidor: ");
+        while (newDis === ""){
+            newDis = prompt("Por favor, ingrese el distribuidor: ");
+        }
         distribuidores.push([newDis, []]);
         otro = parseInt(prompt("¿Desea agregar otro distribuidor? 1(Si) 2(No)"));
         while (otro != 1 && otro != 2){
@@ -50,8 +66,9 @@ function distribuidor(){
                     }
                 }
             for(distribuidor in distribuidores){
-                alert(`Los articulos faltantes del distribuidor ${distribuidores[distribuidor][0]} son: ` + distribuidores[distribuidor][1])
-                console.log(`Los articulos faltantes del distribuidor ${distribuidores[distribuidor][0]} son: ` + distribuidores[distribuidor][1])
+                // let arrayobj = distribuidores[distribuidor[1]]  
+                // alert(`Los articulos faltantes del distribuidor ${distribuidores[distribuidor][0]} son: ` + distribuidores[distribuidor][1])
+                console.log(`Los articulos faltantes del distribuidor ${distribuidores[distribuidor][0]} son: `, distribuidores[distribuidor][1])
             }
 
 }
@@ -60,10 +77,22 @@ function distribuidor(){
 
 function agregarProductos(){
     let productosFaltantes = [];
-    
     continuarProductos = true
+
     while(continuarProductos == true){
-        let productoFaltante = prompt(`Por favor, ingrese articulo faltante y cantidad(por pack) 'Formato [Articulo ; Cantidad]' del distribuidor ${distribuidores[i]} : `).toLocaleUpperCase()
+
+        let articuloFaltante = prompt(`Por favor, ingrese articulo faltante del distribuidor  ${distribuidores[i]} : `).toLocaleUpperCase()
+
+        while(articuloFaltante === ""){
+            articuloFaltante = prompt("Por favor, ingrese una articulo válido.")
+        }
+        let cantidadFaltante = parseInt(prompt(`Por favor, ingrese cantidad(por pack) faltante: `))
+
+        while(Number.isNaN(cantidadFaltante)== true){
+            cantidadFaltante = parseInt(prompt("Por favor, ingrese una cantidad válida."))
+        }
+
+        const productoFaltante = new ProductoFaltante(articuloFaltante, cantidadFaltante)
         productosFaltantes.push(productoFaltante)
 
         otroProducto = parseInt(prompt("¿Desea agregar otro producto? 1(Si) 2(No)"));
@@ -75,13 +104,22 @@ function agregarProductos(){
         }else if(otroProducto == 1){
             continuarProductos = true;
         }
-        // alert(productosFaltantes);
     }
     console.log(productosFaltantes)
+
     return productosFaltantes;
-    
+
 }
 
-function ordenarProductos(listaProductosFaltantes){
-    listaProductosFaltantes.sort();
+function ordenarProductos(listaProductosFaltantes) {
+    listaProductosFaltantes.sort((a,b) => {
+        if (a.articulo > b.articulo){
+            return 1
+        }
+
+        if (a.articulo < b.articulo){
+            return -1
+        }
+        return 0
+    });
 }
